@@ -51,16 +51,16 @@ export const HistoryPanel: React.FC = () => {
 
   if (!showHistory) {
     return (
-      <div className="w-8 bg-gray-950 border-l border-gray-800 flex flex-col items-center justify-center">
+      <div className="w-8 bg-gradient-to-b from-gray-950 to-gray-900 border-l border-gray-800/80 flex flex-col items-center justify-center shadow-lg">
         <button
           onClick={() => setShowHistory(true)}
-          className="w-6 h-16 bg-gray-800 hover:bg-gray-700 rounded-l-lg border border-r-0 border-gray-700 flex items-center justify-center transition-colors group"
+          className="w-6 h-16 bg-gradient-to-l from-gray-800 to-gray-750 hover:from-gray-700 hover:to-gray-700 rounded-l-lg border border-r-0 border-gray-700/80 flex items-center justify-center transition-all group shadow-md hover:shadow-lg"
           title="Show History Panel"
         >
           <div className="flex flex-col space-y-1">
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
           </div>
         </button>
       </div>
@@ -68,18 +68,18 @@ export const HistoryPanel: React.FC = () => {
   }
 
   return (
-    <div className="w-80 bg-gray-950 border-l border-gray-800 p-6 flex flex-col h-full">
+    <div className="w-80 bg-gradient-to-b from-gray-950 to-gray-900 border-l border-gray-800/80 shadow-xl p-6 flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-2">
-          <History className="h-5 w-5 text-gray-400" />
-          <h3 className="text-sm font-medium text-gray-300">History & Variants</h3>
+        <div className="flex items-center space-x-3">
+          <History className="h-5 w-5 text-yellow-400" />
+          <h3 className="text-sm font-bold text-gray-200 tracking-wide uppercase">History & Variants</h3>
         </div>
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setShowHistory(!showHistory)}
-          className="h-6 w-6"
+          className="h-7 w-7 text-lg hover:text-yellow-400"
           title="Hide History Panel"
         >
           ×
@@ -88,11 +88,12 @@ export const HistoryPanel: React.FC = () => {
 
       {/* Variants Grid */}
       <div className="mb-6 flex-shrink-0">
-        <h4 className="text-xs font-medium text-gray-400 mb-3">Current Variants</h4>
+        <h4 className="text-xs font-bold text-gray-300 mb-4 uppercase tracking-wider">Current Variants</h4>
         {generations.length === 0 && edits.length === 0 ? (
-          <div className="text-center py-8">
-            <div className="text-4xl mb-2">🖼️</div>
-            <p className="text-sm text-gray-500">No generations yet</p>
+          <div className="text-center py-10 px-4">
+            <div className="text-5xl mb-3">🖼️</div>
+            <p className="text-sm text-gray-400 font-medium">No generations yet</p>
+            <p className="text-xs text-gray-500 mt-1">Your variants will appear here</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">
@@ -101,10 +102,10 @@ export const HistoryPanel: React.FC = () => {
               <div
                 key={generation.id}
                 className={cn(
-                  'relative aspect-square rounded-lg border-2 cursor-pointer transition-all duration-200 overflow-hidden',
+                  'relative aspect-square rounded-xl border-2 cursor-pointer transition-all duration-250 overflow-hidden group',
                   selectedGenerationId === generation.id
-                    ? 'border-yellow-400'
-                    : 'border-gray-700 hover:border-gray-600'
+                    ? 'border-yellow-400 shadow-lg shadow-yellow-400/20 ring-2 ring-yellow-400/30'
+                    : 'border-gray-700/50 hover:border-gray-600 hover:shadow-md'
                 )}
                 onClick={() => {
                   selectGeneration(generation.id);
@@ -118,31 +119,35 @@ export const HistoryPanel: React.FC = () => {
                     <img
                       src={generation.outputAssets[0].url}
                       alt="Generated variant"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </>
                 ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-400" />
+                  <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                    <div className="relative">
+                      <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-yellow-400" />
+                      <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg animate-pulse" />
+                    </div>
                   </div>
                 )}
-                
+
                 {/* Variant Number */}
-                <div className="absolute top-2 left-2 bg-gray-900/80 text-xs px-2 py-1 rounded">
+                <div className="absolute top-2 left-2 bg-gray-900/90 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-md shadow-lg border border-gray-700/50">
                   #{index + 1}
                 </div>
               </div>
             ))}
-            
+
             {/* Show edits */}
             {edits.slice(-2).map((edit, index) => (
               <div
                 key={edit.id}
                 className={cn(
-                  'relative aspect-square rounded-lg border-2 cursor-pointer transition-all duration-200 overflow-hidden',
+                  'relative aspect-square rounded-xl border-2 cursor-pointer transition-all duration-250 overflow-hidden group',
                   selectedEditId === edit.id
-                    ? 'border-yellow-400'
-                    : 'border-gray-700 hover:border-gray-600'
+                    ? 'border-yellow-400 shadow-lg shadow-yellow-400/20 ring-2 ring-yellow-400/30'
+                    : 'border-gray-700/50 hover:border-gray-600 hover:shadow-md'
                 )}
                 onClick={() => {
                   if (edit.outputAssets[0]) {
@@ -153,19 +158,25 @@ export const HistoryPanel: React.FC = () => {
                 }}
               >
                 {edit.outputAssets[0] ? (
-                  <img
-                    src={edit.outputAssets[0].url}
-                    alt="Edited variant"
-                    className="w-full h-full object-cover"
-                  />
+                  <>
+                    <img
+                      src={edit.outputAssets[0].url}
+                      alt="Edited variant"
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </>
                 ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-yellow-400" />
+                  <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                    <div className="relative">
+                      <div className="animate-spin rounded-full h-7 w-7 border-b-2 border-yellow-400" />
+                      <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg animate-pulse" />
+                    </div>
                   </div>
                 )}
-                
+
                 {/* Edit Label */}
-                <div className="absolute top-2 left-2 bg-purple-900/80 text-xs px-2 py-1 rounded">
+                <div className="absolute top-2 left-2 bg-purple-900/90 backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-md shadow-lg border border-purple-700/50">
                   Edit #{index + 1}
                 </div>
               </div>
@@ -176,55 +187,55 @@ export const HistoryPanel: React.FC = () => {
 
       {/* Current Image Info */}
       {(canvasImage || imageDimensions) && (
-        <div className="mb-4 p-3 bg-gray-900 rounded-lg border border-gray-700">
-          <h4 className="text-xs font-medium text-gray-400 mb-2">Current Image</h4>
-          <div className="space-y-1 text-xs text-gray-500">
+        <div className="mb-5 p-4 bg-gradient-to-b from-gray-900 to-gray-800 rounded-xl border-2 border-gray-700/50 shadow-md">
+          <h4 className="text-xs font-bold text-gray-300 mb-3 uppercase tracking-wider">Current Image</h4>
+          <div className="space-y-2 text-xs">
             {imageDimensions && (
-              <div className="flex justify-between">
-                <span>Dimensions:</span>
-                <span className="text-gray-300">{imageDimensions.width} × {imageDimensions.height}</span>
+              <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+                <span className="text-gray-400 font-medium">Dimensions:</span>
+                <span className="text-gray-200 font-semibold">{imageDimensions.width} × {imageDimensions.height}</span>
               </div>
             )}
-            <div className="flex justify-between">
-              <span>Mode:</span>
-              <span className="text-gray-300 capitalize">{selectedTool}</span>
+            <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+              <span className="text-gray-400 font-medium">Mode:</span>
+              <span className="text-yellow-400 capitalize font-semibold">{selectedTool}</span>
             </div>
           </div>
         </div>
       )}
 
       {/* Generation Details */}
-      <div className="mb-6 p-4 bg-gray-900 rounded-lg border border-gray-700 flex-1 overflow-y-auto min-h-0">
-        <h4 className="text-xs font-medium text-gray-400 mb-2">Generation Details</h4>
+      <div className="mb-6 p-4 bg-gradient-to-b from-gray-900 to-gray-800 rounded-xl border-2 border-gray-700/50 shadow-md flex-1 overflow-y-auto min-h-0">
+        <h4 className="text-xs font-bold text-gray-300 mb-3 uppercase tracking-wider">Generation Details</h4>
         {(() => {
           const gen = generations.find(g => g.id === selectedGenerationId);
           const selectedEdit = edits.find(e => e.id === selectedEditId);
           
           if (gen) {
             return (
-              <div className="space-y-3">
-                <div className="space-y-2 text-xs text-gray-500">
-                  <div>
-                    <span className="text-gray-400">Prompt:</span>
-                    <p className="text-gray-300 mt-1">{gen.prompt}</p>
+              <div className="space-y-4">
+                <div className="space-y-3 text-xs">
+                  <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                    <span className="text-gray-400 font-semibold block mb-2">Prompt:</span>
+                    <p className="text-gray-200 leading-relaxed font-medium">{gen.prompt}</p>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Model:</span>
-                    <span>{gen.modelVersion}</span>
+                  <div className="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-800/50 transition-colors">
+                    <span className="text-gray-400 font-semibold">Model:</span>
+                    <span className="text-gray-200 font-medium">{gen.modelVersion}</span>
                   </div>
                   {gen.parameters.seed && (
-                    <div className="flex justify-between">
-                      <span>Seed:</span>
-                      <span>{gen.parameters.seed}</span>
+                    <div className="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-800/50 transition-colors">
+                      <span className="text-gray-400 font-semibold">Seed:</span>
+                      <span className="text-yellow-400 font-bold">{gen.parameters.seed}</span>
                     </div>
                   )}
                 </div>
-                
+
                 {/* Reference Images */}
                 {gen.sourceAssets.length > 0 && (
                   <div>
-                    <h5 className="text-xs font-medium text-gray-400 mb-2">Reference Images</h5>
-                    <div className="grid grid-cols-2 gap-2">
+                    <h5 className="text-xs font-semibold text-gray-300 mb-3 uppercase tracking-wider">Reference Images</h5>
+                    <div className="grid grid-cols-2 gap-2.5">
                       {gen.sourceAssets.map((asset, index) => (
                         <button
                           key={asset.id}
@@ -234,17 +245,17 @@ export const HistoryPanel: React.FC = () => {
                             title: `Reference Image ${index + 1}`,
                             description: 'This reference image was used to guide the generation'
                           })}
-                          className="relative aspect-square rounded border border-gray-700 hover:border-gray-600 transition-colors overflow-hidden group"
+                          className="relative aspect-square rounded-lg border-2 border-gray-700/50 hover:border-gray-600 transition-all overflow-hidden group shadow-md hover:shadow-lg"
                         >
                           <img
                             src={asset.url}
                             alt={`Reference ${index + 1}`}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform group-hover:scale-110"
                           />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                            <ImageIcon className="h-4 w-4 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <ImageIcon className="h-5 w-5 text-white drop-shadow-lg" />
                           </div>
-                          <div className="absolute bottom-1 left-1 bg-gray-900/80 text-xs px-1 py-0.5 rounded text-gray-300">
+                          <div className="absolute bottom-1.5 left-1.5 bg-gray-900/90 backdrop-blur-sm text-xs font-bold px-2 py-1 rounded-md shadow-lg border border-gray-700/50 text-gray-200">
                             Ref {index + 1}
                           </div>
                         </button>
@@ -257,24 +268,24 @@ export const HistoryPanel: React.FC = () => {
           } else if (selectedEdit) {
             const parentGen = generations.find(g => g.id === selectedEdit.parentGenerationId);
             return (
-              <div className="space-y-3">
-                <div className="space-y-2 text-xs text-gray-500">
-                  <div>
-                    <span className="text-gray-400">Edit Instruction:</span>
-                    <p className="text-gray-300 mt-1">{selectedEdit.instruction}</p>
+              <div className="space-y-4">
+                <div className="space-y-3 text-xs">
+                  <div className="p-3 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                    <span className="text-gray-400 font-semibold block mb-2">Edit Instruction:</span>
+                    <p className="text-gray-200 leading-relaxed font-medium">{selectedEdit.instruction}</p>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Type:</span>
-                    <span>Image Edit</span>
+                  <div className="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-800/50 transition-colors">
+                    <span className="text-gray-400 font-semibold">Type:</span>
+                    <span className="text-gray-200 font-medium">Image Edit</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Created:</span>
-                    <span>{new Date(selectedEdit.timestamp).toLocaleTimeString()}</span>
+                  <div className="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-800/50 transition-colors">
+                    <span className="text-gray-400 font-semibold">Created:</span>
+                    <span className="text-gray-200 font-medium">{new Date(selectedEdit.timestamp).toLocaleTimeString()}</span>
                   </div>
                   {selectedEdit.maskAssetId && (
-                    <div className="flex justify-between">
-                      <span>Mask:</span>
-                      <span className="text-purple-400">Applied</span>
+                    <div className="flex justify-between items-center py-2 px-3 rounded-lg hover:bg-gray-800/50 transition-colors">
+                      <span className="text-gray-400 font-semibold">Mask:</span>
+                      <span className="text-purple-400 font-bold">Applied</span>
                     </div>
                   )}
                 </div>
@@ -335,8 +346,9 @@ export const HistoryPanel: React.FC = () => {
             );
           } else {
             return (
-              <div className="space-y-2 text-xs text-gray-500">
-                <p className="text-gray-400">Select a generation or edit to view details</p>
+              <div className="text-center py-10 px-4">
+                <div className="text-4xl mb-3 opacity-50">📝</div>
+                <p className="text-sm text-gray-400 font-medium">Select a generation or edit to view details</p>
               </div>
             );
           }
@@ -345,10 +357,10 @@ export const HistoryPanel: React.FC = () => {
 
       {/* Actions */}
       <div className="space-y-3 flex-shrink-0">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          className="w-full"
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full font-semibold hover:text-yellow-400"
           onClick={() => {
             // Find the currently displayed image (either generation or edit)
             let imageUrl: string | null = null;

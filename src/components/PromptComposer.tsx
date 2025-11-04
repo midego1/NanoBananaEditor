@@ -112,16 +112,16 @@ export const PromptComposer: React.FC = () => {
 
   if (!showPromptPanel) {
     return (
-      <div className="w-8 bg-gray-950 border-r border-gray-800 flex flex-col items-center justify-center">
+      <div className="w-8 bg-gradient-to-b from-gray-950 to-gray-900 border-r border-gray-800/80 flex flex-col items-center justify-center shadow-lg">
         <button
           onClick={() => setShowPromptPanel(true)}
-          className="w-6 h-16 bg-gray-800 hover:bg-gray-700 rounded-r-lg border border-l-0 border-gray-700 flex items-center justify-center transition-colors group"
+          className="w-6 h-16 bg-gradient-to-r from-gray-800 to-gray-750 hover:from-gray-700 hover:to-gray-700 rounded-r-lg border border-l-0 border-gray-700/80 flex items-center justify-center transition-all group shadow-md hover:shadow-lg"
           title="Show Prompt Panel"
         >
           <div className="flex flex-col space-y-1">
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
-            <div className="w-1 h-1 bg-gray-500 group-hover:bg-gray-400 rounded-full"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
+            <div className="w-1.5 h-1.5 bg-gray-500 group-hover:bg-yellow-400 rounded-full transition-all group-hover:shadow-sm group-hover:shadow-yellow-400/50"></div>
           </div>
         </button>
       </div>
@@ -130,16 +130,17 @@ export const PromptComposer: React.FC = () => {
 
   return (
     <>
-    <div className="w-80 lg:w-72 xl:w-80 h-full bg-gray-950 border-r border-gray-800 p-6 flex flex-col space-y-6 overflow-y-auto">
+    <div className="w-80 lg:w-72 xl:w-80 h-full bg-gradient-to-b from-gray-950 to-gray-900 border-r border-gray-800/80 shadow-xl p-6 flex flex-col space-y-6 overflow-y-auto">
       <div>
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-sm font-medium text-gray-300">Mode</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-bold text-gray-200 tracking-wide uppercase">Mode</h3>
           <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setShowHintsModal(true)}
-              className="h-6 w-6"
+              className="h-7 w-7 hover:text-yellow-400"
+              title="Prompt Hints"
             >
               <HelpCircle className="h-4 w-4" />
             </Button>
@@ -147,27 +148,30 @@ export const PromptComposer: React.FC = () => {
               variant="ghost"
               size="icon"
               onClick={() => setShowPromptPanel(false)}
-              className="h-6 w-6"
+              className="h-7 w-7 text-lg hover:text-yellow-400"
               title="Hide Prompt Panel"
             >
               ×
             </Button>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2.5">
           {tools.map((tool) => (
             <button
               key={tool.id}
               onClick={() => setSelectedTool(tool.id)}
               className={cn(
-                'flex flex-col items-center p-3 rounded-lg border transition-all duration-200',
+                'flex flex-col items-center p-3.5 rounded-xl border-2 transition-all duration-250 group relative overflow-hidden',
                 selectedTool === tool.id
-                  ? 'bg-yellow-400/10 border-yellow-400/50 text-yellow-400'
-                  : 'bg-gray-900 border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                  ? 'bg-gradient-to-b from-yellow-400/15 to-yellow-400/5 border-yellow-400/60 text-yellow-400 shadow-lg shadow-yellow-400/20'
+                  : 'bg-gradient-to-b from-gray-800 to-gray-900 border-gray-700/50 text-gray-400 hover:bg-gradient-to-b hover:from-gray-750 hover:to-gray-800 hover:text-gray-300 hover:border-gray-600 hover:shadow-md'
               )}
             >
-              <tool.icon className="h-5 w-5 mb-1" />
-              <span className="text-xs font-medium">{tool.label}</span>
+              {selectedTool === tool.id && (
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-transparent opacity-50"></div>
+              )}
+              <tool.icon className="h-5 w-5 mb-1.5 relative z-10 transition-transform group-hover:scale-110" />
+              <span className="text-xs font-semibold relative z-10">{tool.label}</span>
             </button>
           ))}
         </div>
@@ -176,17 +180,17 @@ export const PromptComposer: React.FC = () => {
       {/* File Upload */}
       <div>
         <div>
-          <label className="text-sm font-medium text-gray-300 mb-1 block">
+          <label className="text-sm font-bold text-gray-200 mb-2 block tracking-wide">
             {selectedTool === 'generate' ? 'Reference Images' : selectedTool === 'edit' ? 'Style References' : 'Upload Image'}
           </label>
           {selectedTool === 'mask' && (
-            <p className="text-xs text-gray-400 mb-3">Edit an image with masks</p>
+            <p className="text-xs text-gray-400 mb-3 leading-relaxed">Edit an image with masks</p>
           )}
           {selectedTool === 'generate' && (
-            <p className="text-xs text-gray-500 mb-3">Optional, up to 2 images</p>
+            <p className="text-xs text-gray-500 mb-3 leading-relaxed">Optional, up to 2 images</p>
           )}
           {selectedTool === 'edit' && (
-            <p className="text-xs text-gray-500 mb-3">
+            <p className="text-xs text-gray-500 mb-3 leading-relaxed">
               {canvasImage ? 'Optional style references, up to 2 images' : 'Upload image to edit, up to 2 images'}
             </p>
           )}
@@ -211,23 +215,23 @@ export const PromptComposer: React.FC = () => {
           </Button>
           
           {/* Show uploaded images preview */}
-          {((selectedTool === 'generate' && uploadedImages.length > 0) || 
+          {((selectedTool === 'generate' && uploadedImages.length > 0) ||
             (selectedTool === 'edit' && editReferenceImages.length > 0)) && (
-            <div className="mt-3 space-y-2">
+            <div className="mt-4 space-y-2.5">
               {(selectedTool === 'generate' ? uploadedImages : editReferenceImages).map((image, index) => (
-                <div key={index} className="relative">
+                <div key={index} className="relative group">
                   <img
                     src={image}
                     alt={`Reference ${index + 1}`}
-                    className="w-full h-20 object-cover rounded-lg border border-gray-700"
+                    className="w-full h-20 object-cover rounded-lg border-2 border-gray-700/50 shadow-md group-hover:border-gray-600 transition-all"
                   />
                   <button
                     onClick={() => selectedTool === 'generate' ? removeUploadedImage(index) : removeEditReferenceImage(index)}
-                    className="absolute top-1 right-1 bg-gray-900/80 text-gray-400 hover:text-gray-200 rounded-full p-1 transition-colors"
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-b from-red-600 to-red-700 text-white hover:from-red-500 hover:to-red-600 rounded-full flex items-center justify-center text-sm font-bold shadow-lg hover:shadow-xl transition-all hover:scale-110"
                   >
                     ×
                   </button>
-                  <div className="absolute bottom-1 left-1 bg-gray-900/80 text-xs px-2 py-1 rounded text-gray-300">
+                  <div className="absolute bottom-2 left-2 bg-gray-900/90 backdrop-blur-sm text-xs font-semibold px-2.5 py-1 rounded-md shadow-md border border-gray-700/50 text-gray-200">
                     Ref {index + 1}
                   </div>
                 </div>
@@ -239,7 +243,7 @@ export const PromptComposer: React.FC = () => {
 
       {/* Prompt Input */}
       <div>
-        <label className="text-sm font-medium text-gray-300 mb-3 block">
+        <label className="text-sm font-bold text-gray-200 mb-3 block tracking-wide">
           {selectedTool === 'generate' ? 'Describe what you want to create' : 'Describe your changes'}
         </label>
         <Textarea
@@ -250,23 +254,23 @@ export const PromptComposer: React.FC = () => {
               ? 'A serene mountain landscape at sunset with a lake reflecting the golden sky...'
               : 'Make the sky more dramatic, add storm clouds...'
           }
-          className="min-h-[120px] resize-none"
+          className="min-h-[120px] resize-none bg-gray-900 border-2 border-gray-700/50 focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 shadow-inner"
         />
-        
+
         {/* Prompt Quality Indicator */}
-        <button 
+        <button
           onClick={() => setShowHintsModal(true)}
-          className="mt-2 flex items-center text-xs hover:text-gray-400 transition-colors group"
+          className="mt-3 flex items-center text-xs hover:text-gray-300 transition-colors group px-2 py-1.5 rounded-md hover:bg-gray-800/50"
         >
           {currentPrompt.length < 20 ? (
-            <HelpCircle className="h-3 w-3 mr-2 text-red-500 group-hover:text-red-400" />
+            <HelpCircle className="h-3.5 w-3.5 mr-2 text-red-400 group-hover:text-red-300" />
           ) : (
             <div className={cn(
-              'h-2 w-2 rounded-full mr-2',
-              currentPrompt.length < 50 ? 'bg-yellow-500' : 'bg-green-500'
+              'h-2.5 w-2.5 rounded-full mr-2 shadow-sm',
+              currentPrompt.length < 50 ? 'bg-yellow-400 shadow-yellow-400/50' : 'bg-green-400 shadow-green-400/50'
             )} />
           )}
-          <span className="text-gray-500 group-hover:text-gray-400">
+          <span className="text-gray-400 group-hover:text-gray-300 font-medium">
             {currentPrompt.length < 20 ? 'Add detail for better results' :
              currentPrompt.length < 50 ? 'Good detail level' : 'Excellent prompt detail'}
           </span>
@@ -278,16 +282,16 @@ export const PromptComposer: React.FC = () => {
       <Button
         onClick={handleGenerate}
         disabled={isGenerating || !currentPrompt.trim()}
-        className="w-full h-14 text-base font-medium"
+        className="w-full h-14 text-base font-bold shadow-2xl shadow-yellow-400/30 hover:shadow-yellow-400/40"
       >
         {isGenerating ? (
           <>
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900 mr-2" />
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-900 mr-2.5" />
             Generating...
           </>
         ) : (
           <>
-            <Wand2 className="h-4 w-4 mr-2" />
+            <Wand2 className="h-5 w-5 mr-2.5" />
             {selectedTool === 'generate' ? 'Generate' : 'Apply Edit'}
           </>
         )}
@@ -297,23 +301,23 @@ export const PromptComposer: React.FC = () => {
       <div>
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="flex items-center text-sm text-gray-400 hover:text-gray-300 transition-colors duration-200"
+          className="flex items-center text-sm font-semibold text-gray-400 hover:text-yellow-400 transition-all duration-250 px-2 py-1.5 rounded-md hover:bg-gray-800/50"
         >
-          {showAdvanced ? <ChevronDown className="h-4 w-4 mr-1" /> : <ChevronRight className="h-4 w-4 mr-1" />}
+          {showAdvanced ? <ChevronDown className="h-4 w-4 mr-2" /> : <ChevronRight className="h-4 w-4 mr-2" />}
           {showAdvanced ? 'Hide' : 'Show'} Advanced Controls
         </button>
-        
+
         <button
           onClick={() => setShowClearConfirm(!showClearConfirm)}
-          className="flex items-center text-sm text-gray-400 hover:text-red-400 transition-colors duration-200 mt-2"
+          className="flex items-center text-sm font-semibold text-gray-400 hover:text-red-400 transition-all duration-250 mt-2 px-2 py-1.5 rounded-md hover:bg-gray-800/50"
         >
           <RotateCcw className="h-4 w-4 mr-2" />
           Clear Session
         </button>
-        
+
         {showClearConfirm && (
-          <div className="mt-3 p-3 bg-gray-800 rounded-lg border border-gray-700">
-            <p className="text-xs text-gray-300 mb-3">
+          <div className="mt-4 p-4 bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl border-2 border-red-500/30 shadow-lg shadow-red-500/10">
+            <p className="text-xs text-gray-200 mb-4 leading-relaxed font-medium">
               Are you sure you want to clear this session? This will remove all uploads, prompts, and canvas content.
             </p>
             <div className="flex space-x-2">
@@ -338,10 +342,10 @@ export const PromptComposer: React.FC = () => {
         )}
         
         {showAdvanced && (
-          <div className="mt-4 space-y-4">
+          <div className="mt-5 space-y-5 p-4 bg-gray-900/50 rounded-xl border border-gray-800/50 backdrop-blur-sm">
             {/* Temperature */}
             <div>
-              <label className="text-xs text-gray-400 mb-2 block">
+              <label className="text-xs font-semibold text-gray-300 mb-2.5 block tracking-wide">
                 Creativity ({temperature})
               </label>
               <input
@@ -351,13 +355,13 @@ export const PromptComposer: React.FC = () => {
                 step="0.1"
                 value={temperature}
                 onChange={(e) => setTemperature(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer slider shadow-inner"
               />
             </div>
-            
+
             {/* Seed */}
             <div>
-              <label className="text-xs text-gray-400 mb-2 block">
+              <label className="text-xs font-semibold text-gray-300 mb-2.5 block tracking-wide">
                 Seed (optional)
               </label>
               <input
@@ -365,7 +369,7 @@ export const PromptComposer: React.FC = () => {
                 value={seed || ''}
                 onChange={(e) => setSeed(e.target.value ? parseInt(e.target.value) : null)}
                 placeholder="Random"
-                className="w-full h-8 px-2 bg-gray-900 border border-gray-700 rounded text-xs text-gray-100"
+                className="w-full h-9 px-3 bg-gray-800 border-2 border-gray-700/50 rounded-lg text-xs text-gray-100 font-medium focus:border-yellow-400/50 focus:ring-2 focus:ring-yellow-400/20 shadow-inner transition-all"
               />
             </div>
           </div>
@@ -373,28 +377,28 @@ export const PromptComposer: React.FC = () => {
       </div>
 
       {/* Keyboard Shortcuts */}
-      <div className="pt-4 border-t border-gray-800">
-        <h4 className="text-xs font-medium text-gray-400 mb-2">Shortcuts</h4>
-        <div className="space-y-1 text-xs text-gray-500">
-          <div className="flex justify-between">
-            <span>Generate</span>
-            <span>⌘ + Enter</span>
+      <div className="pt-5 border-t border-gray-800/50">
+        <h4 className="text-xs font-bold text-gray-300 mb-3 uppercase tracking-wider">Shortcuts</h4>
+        <div className="space-y-2 text-xs">
+          <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+            <span className="text-gray-400 font-medium">Generate</span>
+            <kbd className="px-2 py-1 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-xs shadow-sm">⌘ + Enter</kbd>
           </div>
-          <div className="flex justify-between">
-            <span>Re-roll</span>
-            <span>⇧ + R</span>
+          <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+            <span className="text-gray-400 font-medium">Re-roll</span>
+            <kbd className="px-2 py-1 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-xs shadow-sm">⇧ + R</kbd>
           </div>
-          <div className="flex justify-between">
-            <span>Edit mode</span>
-            <span>E</span>
+          <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+            <span className="text-gray-400 font-medium">Edit mode</span>
+            <kbd className="px-2 py-1 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-xs shadow-sm">E</kbd>
           </div>
-          <div className="flex justify-between">
-            <span>History</span>
-            <span>H</span>
+          <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+            <span className="text-gray-400 font-medium">History</span>
+            <kbd className="px-2 py-1 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-xs shadow-sm">H</kbd>
           </div>
-          <div className="flex justify-between">
-            <span>Toggle Panel</span>
-            <span>P</span>
+          <div className="flex justify-between items-center py-1.5 px-2 rounded-md hover:bg-gray-800/50 transition-colors">
+            <span className="text-gray-400 font-medium">Toggle Panel</span>
+            <kbd className="px-2 py-1 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-xs shadow-sm">P</kbd>
           </div>
         </div>
       </div>
